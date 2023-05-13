@@ -5,6 +5,7 @@ import (
 	"net"
 	"net/http"
 	"github.com/kazuto28/ndl-go/pkg/env"
+	"github.com/kazuto28/ndl-go/pkg/errors"
 )
 
 type HttpSession struct {
@@ -36,7 +37,7 @@ func (se *HttpSession)InitClient(){
 func (se *HttpSession)Request(url string) (*http.Response,error){
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		return nil, err // TODO
+		return nil, errors.Wrap(err,"HttpSession","ERROR")
 	}
 	for k, v := range se.Headers {
 		req.Header.Add(k, v)
@@ -46,7 +47,7 @@ func (se *HttpSession)Request(url string) (*http.Response,error){
 	}
 	resp, err := se.Client.Do(req)
 	if err != nil {
-		return nil, err // TODO
+		return nil, errors.Wrap(err,"HttpSession","ERROR")
 	}
 	return resp, nil
 }

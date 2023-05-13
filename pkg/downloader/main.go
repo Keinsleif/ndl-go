@@ -2,6 +2,7 @@ package downloader
 
 import (
 	"time"
+	"net/url"
 	"github.com/kazuto28/ndl-go/pkg/errors"
 	"github.com/kazuto28/ndl-go/pkg/env"
 )
@@ -27,7 +28,7 @@ type episodeRow struct {
 
 type novelPart struct {
 	SubTitle string
-	Body string
+	Body []string
 }
 
 type NovelInfo struct {
@@ -37,7 +38,8 @@ type NovelInfo struct {
 	Type string
 	NumParts int
 	Index []any
-	IndexUrl string
+	Episodes map[int]*episodeRow
+	IndexUrl url.URL
 }
 
 type NovelData struct {
@@ -52,13 +54,8 @@ type NovelDownloader interface {
 	Data() *NovelData
 	Mark(int,bool)
 	MarkAll(bool)
-	realIE() error
-	realNE() error
-}
-
-func IE(nd NovelDownloader) *NovelInfo{
-	nd.realIE()
-	return nd.Info()
+	IE() error
+	NE() error
 }
 
 func GetND(src string,e env.Env) (NovelDownloader,error){

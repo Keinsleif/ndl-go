@@ -5,6 +5,7 @@ import (
 	flags "github.com/jessevdk/go-flags"
 	"os"
 	"github.com/kazuto28/ndl-go/pkg/util"
+	"github.com/kazuto28/ndl-go/pkg/errors"
 )
 
 // Multiple Source manager
@@ -52,12 +53,15 @@ type HttpOption struct {
 }
 
 // Env constructor
-func MkEnv() *Env {
+func MkEnv() (*Env,error) {
 	var e Env
-	o := ParseOptions()
+	o,err := ParseOptions()
+	if err!=nil{
+		return &e, errors.Wrap(err, "EnvManager","ERROR")
+	}
 	c, err := ParseConfig(o.General.ConfigFile)
 	if err != nil {
-		panic(err)
+		return &e, errors.Wrap(err,"EnvManager","ERROR")
 	}
 	e.Src = MkMultipleSrc(o.Args.Source)
 	if o.General.IsQuiet {
@@ -72,7 +76,7 @@ func MkEnv() *Env {
 		e.Delay = c.DefaultDelay
 	}
 	e.Http = &HttpOption{Headers: c.Headers, Timeout: c.Timeout, Retries: c.Retries}
-	return &e
+	return &e, nil
 }
 
 type generalOptions struct {
@@ -103,24 +107,24 @@ type Option struct {
 	Args       positionalOptions `positional-args:"yes"`
 }
 
-func ParseOptions() *Option {
+func ParseOptions() (*Option, error) {
 	opts := Option{
 		General:    generalOptions{Version: false, IsQuiet: false, ConfigFile: util.GetConfigPath()[1]},
 		Downloader: downloaderOptions{IsAxel: false, IsFromFile: false, IsUpdate: false},
 		Formatter:  formatterOptions{Theme: "auto", IsRenew: false},
 		Args:       positionalOptions{},
 	}
-	parser := flags.NewParser(&opts, flags.Default)
+	parser := flags.NewParser(&opts, flags.HelpFlag | flags.PassDoubleDash)
 	parser.Name = "ndl-go"
 	_, err := parser.Parse()
 	if err != nil {
 		if e, ok := err.(*flags.Error); ok && e.Type == flags.ErrHelp {
-			os.Exit(0)
+			// parser.WriteHelp(os.Stdout)
+			return &opts, errors.Wrap(err,"","INFO").SetReturnCode(0)
 		}
-		//		panic(err)
-		os.Exit(1)
+		return &opts, errors.Wrap(err,"OptionParser","ERROR")
 	}
-	return &opts
+	return &opts, nil
 }
 
 type Config struct {
@@ -160,18 +164,18 @@ func ParseConfig(fileName string) (*Config, error) {
 	var c Config
 	fp, err := util.CleanPath(fileName)
 	if err != nil {
-		return &c, err
+		return &c, errors.Wrap(err,"ConfigLoader","ERROR")
 	}
 	file, err := os.Open(fp)
 	if err != nil {
-		return &c, err
+		return &c, errors.Wrap(err,"ConfigLoader","ERROR")
 	}
 	defer file.Close()
 
 	decoder := json.NewDecoder(file)
 	err = decoder.Decode(&c)
 	if err != nil {
-		return &c, nil
+		return &c, errors.Wrap(err,"ConfigLoader","ERROR")
 	}
 	return &c, nil
 }
@@ -179,18 +183,18 @@ func ParseConfig(fileName string) (*Config, error) {
 func CreateConfig(filePath string, config *Config) error {
 	fp,err := util.CleanPath(filePath)
 	if err != nil {
-		return err
+		return errors.Wrap(err,"ConfigLoader","WARN")
 	}
 	file, err := os.Create(fp)
 	if err != nil {
-		return err
+		return errors.Wrap(err,"ConfigLoader","WARN")
 	}
 	defer file.Close()
 
 	encoder := json.NewEncoder(file)
 	err = encoder.Encode(*config)
 	if err != nil {
-		return err
+		return errors.Wrap(err,"ConfigLoader","WARN")
 	}
 	return nil
 }

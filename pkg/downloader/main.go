@@ -50,6 +50,8 @@ type NovelDownloader interface {
 	Init(*env.Env)
 	Info() *NovelInfo
 	Data() *NovelData
+	Mark(int,bool)
+	MarkAll(bool)
 	realIE() error
 	realNE() error
 }

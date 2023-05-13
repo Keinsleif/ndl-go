@@ -17,6 +17,7 @@ type KakuyomuND struct {
 	Session *nm.HttpSession
 	info *NovelInfo
 	data *NovelData
+	mark map[int]bool
 }
 
 func (nd KakuyomuND)MatchSrc(src string)bool{
@@ -48,6 +49,18 @@ func (nd *KakuyomuND)Info() *NovelInfo{
 
 func (nd *KakuyomuND)Data() *NovelData{
 	return nd.data
+}
+
+func (nd *KakuyomuND)Mark(n int,m bool) {
+	if 0 < n && n < nd.info.NumParts {
+		nd.mark[n] = m
+	}
+}
+
+func (nd *KakuyomuND)MarkAll(m bool) {
+	for i := 0; i<nd.info.NumParts; i++ {
+		nd.mark[i] = m
+	}
 }
 
 func (nd *KakuyomuND)realIE() error{

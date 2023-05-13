@@ -8,13 +8,42 @@ import (
 	"golang.org/x/exp/slices"
 	"github.com/PuerkitoBio/goquery"
 	nm "github.com/kazuto28/ndl-go/pkg/network"
+	"github.com/kazuto28/ndl-go/pkg/env"
+	// "github.com/kazuto28/ndl-go/pkg/errors"
 )
 
 type KakuyomuND struct {
 	Src string
 	Session *nm.Session
-	Info *NovelInfo
-	Data *NovelData
+	info *NovelInfo
+	data *NovelData
+}
+
+func (nd KakuyomuND)MatchSrc(src string)bool{
+	u, err := url.Parse(src)
+	if err != nil {
+		return false
+	}
+	if u.Host =="kakuyomu.jp" {
+		if rs, _ := regexp.MatchString(`/works/([0-9]+)`,u.Path);rs {
+			return true
+		}
+	}
+	return false
+}
+
+func (nd *KakuyomuND)Init(e *env.Env){
+	sess := nm.NewSession(e.Http)
+	nd.Src = e.Src.Current
+	nd.Session = sess
+}
+
+func (nd *KakuyomuND)Info() *NovelInfo{
+	return nd.info
+}
+
+func (nd *KakuyomuND)Data() *NovelData{
+	return nd.data
 }
 
 func (nd *KakuyomuND)realIE() error{
@@ -62,12 +91,12 @@ func (nd *KakuyomuND)realIE() error{
 			cid++
 		}
 	})
-	nd.Info = &ni
+	nd.info = &ni
 	return nil
 }
 
 func (nd *KakuyomuND)realNE() error{
 	var ne NovelData
-	nd.Data = &ne
+	nd.data = &ne
 	return nil
 }

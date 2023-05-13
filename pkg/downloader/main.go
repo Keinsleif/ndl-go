@@ -2,10 +2,7 @@ package downloader
 
 import (
 	"time"
-	"net/url"
-	"regexp"
 	"github.com/kazuto28/ndl-go/pkg/errors"
-	nm "github.com/kazuto28/ndl-go/pkg/network"
 	"github.com/kazuto28/ndl-go/pkg/env"
 )
 /*
@@ -49,25 +46,24 @@ type NovelData struct {
 }
 
 type NovelDownloader interface {
+	MatchSrc(string) bool
+	Init(*env.Env)
+	Info() *NovelInfo
+	Data() *NovelData
 	realIE() error
 	realNE() error
 }
 
-func IE(nd NovelDownloader){
+func IE(nd NovelDownloader) *NovelInfo{
 	nd.realIE()
+	return nd.Info()
 }
 
-func MatchSrc(src string,no env.HttpOption) (NovelDownloader,error){
-	u, err := url.Parse(src)
-	if err != nil {
-		return nil, errors.WrapWithData(err,"Main","Matching source: "+err.Error(),"WARN")
-	}
-	if u.Host =="kakuyomu.jp" {
-		sess := nm.NewSession(no)
-		if rs, _ := regexp.MatchString(`/works/([0-9]+)`,u.Path);rs {
-			nd := KakuyomuND{Src:src,Session: sess}
-			return &nd, nil
-		}
+func GetND(src string,e env.Env) (NovelDownloader,error){
+	if (KakuyomuND{}.MatchSrc(src)) {
+		var nd KakuyomuND
+		nd.Init(&e)
+		return &nd, nil
 	}
 	return nil, errors.New("Main","Matching source: unsupported","WARN")
 }

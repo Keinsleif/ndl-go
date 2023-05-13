@@ -15,7 +15,7 @@ type Session struct {
 	Client  *http.Client
 }
 
-func NewSession(o env.HttpOption) *Session{
+func NewSession(o *env.HttpOption) *Session{
 	s := Session{Headers:o.Headers,Timeout:o.Timeout,Retries: o.Retries}
 	s.InitClient()
 	return &s

@@ -7,7 +7,7 @@ import (
 	"github.com/kazuto28/ndl-go/pkg/env"
 )
 
-type Session struct {
+type HttpSession struct {
 	Headers map[string]string
 	Cookies map[string]string
 	Timeout [2]float64
@@ -15,13 +15,13 @@ type Session struct {
 	Client  *http.Client
 }
 
-func NewSession(o *env.HttpOption) *Session{
-	s := Session{Headers:o.Headers,Timeout:o.Timeout,Retries: o.Retries}
+func NewHttpSession(o *env.HttpOption) *HttpSession{
+	s := HttpSession{Headers:o.Headers,Timeout:o.Timeout,Retries: o.Retries}
 	s.InitClient()
 	return &s
 }
 
-func (se *Session)InitClient(){
+func (se *HttpSession)InitClient(){
 	client := &http.Client{
 		Transport: &http.Transport{
 			Dial: (&net.Dialer{
@@ -33,7 +33,7 @@ func (se *Session)InitClient(){
 	se.Client = client
 }
 
-func (se *Session)Request(url string) (*http.Response,error){
+func (se *HttpSession)Request(url string) (*http.Response,error){
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err // TODO

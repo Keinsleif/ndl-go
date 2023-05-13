@@ -14,7 +14,7 @@ import (
 
 type KakuyomuND struct {
 	Src string
-	Session *nm.Session
+	Session *nm.HttpSession
 	info *NovelInfo
 	data *NovelData
 }
@@ -37,7 +37,7 @@ func (nd *KakuyomuND)Init(e *env.Env){
 	if _,ok := hop.Headers["User-Agent"]; !ok {
 		hop.Headers["User-Agent"]="Mozilla/5.0 (X11; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0"
 	}
-	sess := nm.NewSession(hop)
+	sess := nm.NewHttpSession(hop)
 	nd.Src = e.Src.Current
 	nd.Session = sess
 }

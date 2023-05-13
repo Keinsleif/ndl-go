@@ -33,7 +33,11 @@ func (nd KakuyomuND)MatchSrc(src string)bool{
 }
 
 func (nd *KakuyomuND)Init(e *env.Env){
-	sess := nm.NewSession(e.Http)
+	hop := e.Http.Copy()
+	if _,ok := hop.Headers["User-Agent"]; !ok {
+		hop.Headers["User-Agent"]="Mozilla/5.0 (X11; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0"
+	}
+	sess := nm.NewSession(hop)
 	nd.Src = e.Src.Current
 	nd.Session = sess
 }

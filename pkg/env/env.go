@@ -52,6 +52,15 @@ type HttpOption struct {
 	Retries int
 }
 
+func (ho HttpOption) Copy() *HttpOption{
+	nho := ho
+	nho.Headers = make(map[string]string)
+	for k,v := range ho.Headers {
+		nho.Headers[k]=v
+	}
+	return &nho
+}
+
 // Env constructor
 func MkEnv() (*Env,error) {
 	var e Env

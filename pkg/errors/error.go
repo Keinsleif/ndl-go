@@ -11,12 +11,18 @@ type NovelDLError struct {
 	msg string
 	class string
 	Level string
+	ReturnCode int
 	Stack *runtime.Frames
 }
 
 func (e *NovelDLError)Error() string {
-	txt := "ERROR: "
-	txt += fmt.Sprintf("[%s] %s",e.class,e.msg)
+	var txt string
+	if e.class == "" {
+		txt = e.msg
+	}else {
+		txt = "ERROR: "
+		txt += fmt.Sprintf("[%s] %s",e.class,e.msg)
+	}
 	return txt
 }
 
@@ -38,15 +44,20 @@ func (e *NovelDLError)FormatStacktrace() string{
 	return strings.Join(l,"\n")
 }
 
-func New(cls, msg, level string) *NovelDLError{
-	return &NovelDLError{err:nil,class:cls,msg:msg,Level:level,Stack:getStacktrace(3)}
+func (e *NovelDLError)SetReturnCode(c int) *NovelDLError{
+	e.ReturnCode = c
+	return e
 }
 
-func Wrap(err error,class string) *NovelDLError{
+func New(cls, msg, level string) *NovelDLError{
+	return &NovelDLError{err:nil,class:cls,msg:msg,Level:level,Stack:getStacktrace(3),ReturnCode:1}
+}
+
+func Wrap(err error,class,level string) *NovelDLError{
 	return wrap(err,class,err.Error(),"ERROR")
 }
 
-func WrapWithData(err error,class, msg, level string) *NovelDLError{
+func WrapWithMsg(err error,class, level, msg string) *NovelDLError{
 	return wrap(err, class, msg, level)
 }
 
@@ -55,7 +66,7 @@ func wrap(err error,class, msg, level string) *NovelDLError{
 	case *NovelDLError:
 		return v
 	default:
-		return &NovelDLError{err:err,class:class,msg:msg,Level:level,Stack:getStacktrace(4)}
+		return &NovelDLError{err:err,class:class,msg:msg,Level:level,Stack:getStacktrace(4),ReturnCode:1}
 	}
 }
 

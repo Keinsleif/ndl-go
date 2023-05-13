@@ -9,7 +9,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	nm "github.com/kazuto28/ndl-go/pkg/network"
 	"github.com/kazuto28/ndl-go/pkg/env"
-	// "github.com/kazuto28/ndl-go/pkg/errors"
+	"github.com/kazuto28/ndl-go/pkg/errors"
 )
 
 type KakuyomuND struct {
@@ -62,12 +62,12 @@ func (nd *KakuyomuND)realIE() error{
 	ni.IndexUrl = indexUrl.String()
 	resp, err := nd.Session.Request(ni.IndexUrl)
 	if err != nil {
-		return err
+		return errors.Wrap(err,"KakuyomuND","ERROR")
 	}
 	defer resp.Body.Close()
 	doc, err := goquery.NewDocumentFromReader(resp.Body)
 	if err != nil {
-		return err
+		return errors.Wrap(err,"KakuyomuND","ERROR")
 	}
 	indexRaw := doc.Find(".widget-toc-items").First()
 	ni.NumParts = indexRaw.Find("li.widget-toc-episode").Length()

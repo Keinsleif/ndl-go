@@ -14,4 +14,5 @@ func GetNFList()map[string]func(*ndl.NovelData)*FormattedNovel{
 type FormattedNovel struct {
 	Index string
 	Episodes map[int]string
+	Static embed.FS
 }

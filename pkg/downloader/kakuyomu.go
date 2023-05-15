@@ -85,12 +85,13 @@ func (nd *KakuyomuND)IE() error{
 	indexRaw := doc.Find(".widget-toc-items").First()
 	ni.NumParts = indexRaw.Find("li.widget-toc-episode").Length()
 	ad := doc.Find("#workAuthor-activityName > a")
-	ahref, _ := ad.Attr("href")
-	ni.Author = [2]string{ad.Text(),ni.IndexUrl.String()+ahref}
+	aurl := ni.IndexUrl
+	aurl.Path, _ = ad.Attr("href")
+	ni.Author = [2]string{ad.Text(),aurl.String()}
 	ni.Title = doc.Find("#workTitle").First().Text()
 	desc := doc.Find("#introduction").First()
 	desc.Find(".ui-truncateTextButton-expandButton").Remove()
-	ni.Description = desc.Text()
+	ni.Description, _ = desc.Html()
 	c := ""
 	cid := 1
 	part := 1

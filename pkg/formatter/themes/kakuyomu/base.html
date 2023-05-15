@@ -113,7 +113,7 @@
       <div class="widget-episode js-episode-body-container">
         <div class="widget-episode-inner">
           <div class="widget-episodeBody js-episode-body">
-{{- range $i,$v := (index .nd.Novels .part).Body }}
+{{- range $i, $v := (index .nd.Novels .part).Body }}
 {{- if eq $v "<br/>" }}
 <p id="p{{ add $i 1 }}" class="blank"><br /></p>
 {{- else }}
@@ -166,7 +166,7 @@
   </header>
   <div class="widget-toc-main">
     <ol class="widget-toc-items test-toc-items">
-{{- range $i,$v := .nd.Info.Index }}
+{{- range $i, $v := .nd.Info.Index }}
 {{- if eq $v.Type  "chapter" }}
           <li class="widget-toc-chapter widget-toc-level1 js-vertical-composition-item" data-vertical-composition-done="true">
             <span>{{ $v.Title }}</span>
@@ -283,7 +283,7 @@
     </div>
   </div>
 </div>
-{{- range $i := .config.Loads.JS }}
+{{- range $_, $i := .config.Loads.JS }}
 <script src="{{$i}}"></script>
 {{- end }}
 </body>

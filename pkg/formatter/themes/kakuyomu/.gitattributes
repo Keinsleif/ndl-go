@@ -1,2 +1,3 @@
-static/* linguist-documentation
-tool/* linguist-documentation
+static/* linguist-vendored
+tool/* linguist-vendored
+*.html  linguist-vendored

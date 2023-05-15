@@ -27,7 +27,7 @@ type episodeRow struct {
 }
 
 type novelPart struct {
-	SubTitle string
+	Subtitle string
 	Body []string
 }
 
@@ -43,7 +43,7 @@ type NovelInfo struct {
 }
 
 type NovelData struct {
-	Info NovelInfo
+	Info *NovelInfo
 	Novels map[int]novelPart
 }
 

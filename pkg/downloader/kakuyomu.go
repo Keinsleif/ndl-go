@@ -120,6 +120,7 @@ func (nd *KakuyomuND)IE() error{
 
 func (nd *KakuyomuND)NE() error{
 	var ne NovelData
+	ne.Info = nd.info
 	ne.Novels = make(map[int]novelPart,nd.info.NumParts)
 	for k,v := range nd.mark {
 		if !v{
@@ -135,7 +136,7 @@ func (nd *KakuyomuND)NE() error{
 			return errors.Wrap(err,"KakuyomuND","ERROR")
 		}
 		var novs novelPart
-		novs.SubTitle = doc.Find(".widget-episodeTitle").Text()
+		novs.Subtitle = doc.Find(".widget-episodeTitle").Text()
 		doc.Find(".widget-episodeBody > p").Each(func(i int,s *goquery.Selection){
 			t, _ := s.Html()
 			novs.Body = append(novs.Body, t)

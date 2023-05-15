@@ -28,24 +28,24 @@ type configJson struct {
 func KakuyomuNF(nd *ndl.NovelData) *FormattedNovel {
 	fn := FormattedNovel{Static:static}
 	fn.Episodes = make(map[int]string,len(nd.Novels))
-	tmpl, err := template.ParseFS(themes,"*.html")
-	tmpl = tmpl.Funcs(template.FuncMap{
+	tmpl := template.New("").Funcs(template.FuncMap{
 		"add":func(a,b int)int{return a+b},
 		"iter":func(a int)[]int{return make([]int, a)},
 	})
+	tmpl, err := tmpl.ParseFS(themes,"*.html")
 	if err != nil {
 		panic(err)
 	}
 	var conf configJson
-	if err := json.Unmarshal(configByte,conf);err!=nil {
+	if err := json.Unmarshal(configByte,&conf);err!=nil {
 		panic(err)
 	}
 	var w bytes.Buffer
-	tmpl.ExecuteTemplate(&w,"index",nd)
+	tmpl.ExecuteTemplate(&w,"index.html",nd)
 	fn.Index = w.String()
-	for part,_ := range nd.Novels {
+	for part := range nd.Novels {
 		var w bytes.Buffer
-		tmpl.ExecuteTemplate(&w,"base",map[string]any{"nd":nd,"part":part,"config":conf})
+		tmpl.ExecuteTemplate(&w,"base.html",map[string]any{"nd":nd,"part":part,"config":conf})
 		fn.Episodes[part]= w.String()
 	}
 	return &fn

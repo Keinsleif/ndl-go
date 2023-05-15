@@ -27,7 +27,7 @@ type episodeRow struct {
 }
 
 type novelPart struct {
-	Subtitle string
+	Title string
 	Body []string
 }
 

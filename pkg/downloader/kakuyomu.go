@@ -136,7 +136,7 @@ func (nd *KakuyomuND)NE() error{
 			return errors.Wrap(err,"KakuyomuND","ERROR")
 		}
 		var novs novelPart
-		novs.Subtitle = doc.Find(".widget-episodeTitle").Text()
+		novs.Title = doc.Find(".widget-episodeTitle").Text()
 		doc.Find(".widget-episodeBody > p").Each(func(i int,s *goquery.Selection){
 			t, _ := s.Html()
 			novs.Body = append(novs.Body, t)

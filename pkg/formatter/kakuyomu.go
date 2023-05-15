@@ -32,7 +32,7 @@ func KakuyomuNF(nd *ndl.NovelData) *FormattedNovel {
 		"add":func(a,b int)int{return a+b},
 		"iter":func(a int)[]int{return make([]int, a)},
 	})
-	tmpl, err := tmpl.ParseFS(themes,"*.html")
+	tmpl, err := tmpl.ParseFS(themes,"themes/kakuyomu/*.html")
 	if err != nil {
 		panic(err)
 	}

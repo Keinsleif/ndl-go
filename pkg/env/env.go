@@ -43,6 +43,8 @@ type Env struct {
 	IsFromFile bool
 	IsRenew    bool
 	Http       *HttpOption
+	OutPath    string
+	OutFormat  string
 }
 
 type HttpOption struct {
@@ -88,6 +90,16 @@ func MkEnv() (*Env,error) {
 		e.Delay = c.DefaultDelay
 	}
 	e.Http = &HttpOption{Headers: c.Headers, Timeout: c.Timeout, Retries: c.Retries}
+	if o.Output.Name==""{
+		e.OutFormat = c.OutputFormat
+	} else{
+		e.OutFormat = o.Output.Name
+	}
+	if o.Output.Dir==""{
+		e.OutPath = c.OutputPath
+	} else{
+		e.OutPath = o.Output.Dir
+	}
 	return &e, nil
 }
 
@@ -108,6 +120,11 @@ type formatterOptions struct {
 	IsRenew bool   `short:"r" long:"renew" description:"force to update all files"`
 }
 
+type outputOptions struct {
+	Name string `short:"n" long:"name" default:"" description:"set name of output directory/file"`
+	Dir  string `short:"d" long:"dir" default:"" description:"set path of output directory"`
+}
+
 type positionalOptions struct {
 	Source []string `required:"yes"`
 }
@@ -116,6 +133,7 @@ type Option struct {
 	General    generalOptions    `group:"General Options"`
 	Downloader downloaderOptions `group:"Downloader Options"`
 	Formatter  formatterOptions  `group:"Formatter Options"`
+	Output     outputOptions     `group:"Output Options"`
 	Args       positionalOptions `positional-args:"yes"`
 }
 
@@ -123,7 +141,8 @@ func ParseOptions() (*Option, error) {
 	opts := Option{
 		General:    generalOptions{Version: false, IsQuiet: false, ConfigFile: util.GetConfigPath()[1]},
 		Downloader: downloaderOptions{IsAxel: false, IsFromFile: false, IsUpdate: false},
-		Formatter:  formatterOptions{Theme: "auto", IsRenew: false},
+		Formatter:  formatterOptions{Theme: "", IsRenew: false},
+		Output:     outputOptions{Name:"",Dir:""},
 		Args:       positionalOptions{},
 	}
 	parser := flags.NewParser(&opts, flags.HelpFlag | flags.PassDoubleDash)

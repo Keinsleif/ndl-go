@@ -65,7 +65,7 @@ func (nd *KakuyomuND)MarkAll(m bool) {
 }
 
 func (nd *KakuyomuND)IE() error{
-	ni := NovelInfo{Type:"serial"}
+	ni := NovelInfo{Type:"serial",Site:"kakuyomu"}
 	reg := regexp.MustCompile(`/works/([0-9]+)`)
 	u,_ := url.Parse(nd.Src)
 	ni.IndexUrl = url.URL{

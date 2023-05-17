@@ -40,6 +40,7 @@ type NovelInfo struct {
 	Index []any
 	Episodes map[int]*episodeRow
 	IndexUrl url.URL
+	Site string
 }
 
 type NovelData struct {

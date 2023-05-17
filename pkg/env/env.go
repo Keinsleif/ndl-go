@@ -33,13 +33,12 @@ func MkMultipleSrc(sources []string) *MultipleSrc {
 
 // Environment data structure
 type Env struct {
-	THEMES     []string
 	StdOut     bool
 	LogOut     bool
 	Delay      float64
 	Episode    int
 	Src        *MultipleSrc
-	Theme      [2]string
+	Theme      string
 	IsQuiet    bool
 	IsFromFile bool
 	IsRenew    bool
@@ -77,7 +76,11 @@ func MkEnv() (*Env,error) {
 		e.StdOut = false
 	}
 	e.LogOut = false
-	e.Theme = [2]string{c.DefaultTheme, "$HOME/.config/novel-dl/themes/dark"}
+	if o.Formatter.Theme=="" {
+		e.Theme = c.DefaultTheme
+	} else {
+		e.Theme = o.Formatter.Theme
+	}
 	e.IsRenew = o.Formatter.IsRenew
 	if o.Downloader.IsAxel {
 		e.Delay = c.MinDelay

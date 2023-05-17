@@ -17,14 +17,6 @@ var static embed.FS
 //go:embed themes/kakuyomu/config.json
 var configByte []byte
 
-type configJson struct {
-	Medias []string `json:"medias"`
-	Loads  struct {
-		JS  []string `json:"js"`
-		CSS map[string][]string `json:"css"`
-	} `json:"loads"`
-}
-
 func KakuyomuNF(nd *ndl.NovelData) *FormattedNovel {
 	fn := FormattedNovel{Static:static}
 	fn.Episodes = make(map[int]string,len(nd.Novels))
@@ -36,7 +28,7 @@ func KakuyomuNF(nd *ndl.NovelData) *FormattedNovel {
 	if err != nil {
 		panic(err)
 	}
-	var conf configJson
+	var conf ConfigJson
 	if err := json.Unmarshal(configByte,&conf);err!=nil {
 		panic(err)
 	}

@@ -1,6 +1,8 @@
 package util
 
 import (
+	"io"
+	"embed"
 	"os"
 	"os/user"
 	"path/filepath"
@@ -46,4 +48,31 @@ func CleanPath(p string) (string,error) {
 		path = usr.HomeDir + path[1:]
 	}
 	return path, nil
+}
+
+func CopyEmbedDir(src string, dst string,efs embed.FS)error{
+	err := os.MkdirAll(dst,os.ModePerm)
+	if err != nil {
+		return err
+	}
+	ent, err := efs.ReadDir(src)
+	if err != nil {
+		return err
+	}
+	for _, v := range ent {
+		if v.IsDir() {
+			CopyEmbedDir(filepath.Join(src,v.Name()),filepath.Join(dst,v.Name()),efs)
+		} else {
+			srcf, err := efs.Open(filepath.Join(src,v.Name()))
+			if err != nil {
+				return err
+			}
+			dstf, err := os.Create(filepath.Join(dst,v.Name()))
+			if err != nil {
+				return err
+			}
+			io.Copy(dstf,srcf)
+		}
+	}
+	return nil
 }

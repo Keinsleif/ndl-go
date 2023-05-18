@@ -18,6 +18,7 @@ type KakuyomuND struct {
 	info *NovelInfo
 	data *NovelData
 	mark map[int]bool
+	env env.Env
 }
 
 func (nd KakuyomuND)MatchSrc(src string)bool{
@@ -41,6 +42,7 @@ func (nd *KakuyomuND)Init(e *env.Env){
 	sess := nm.NewHttpSession(hop)
 	nd.Src = e.Src.Current
 	nd.Session = sess
+	nd.env = *e
 }
 
 func (nd *KakuyomuND)Info() *NovelInfo{

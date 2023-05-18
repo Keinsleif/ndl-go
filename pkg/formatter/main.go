@@ -10,6 +10,7 @@ import (
 	"text/template"
 	"encoding/json"
 	"github.com/kazuto28/ndl-go/pkg/env"
+	"github.com/kazuto28/ndl-go/pkg/util"
 	ndl "github.com/kazuto28/ndl-go/pkg/downloader"
 )
 
@@ -74,6 +75,10 @@ func GenericNF(nd *ndl.NovelData,e *env.Env) error{
 			return err
 		}
 		w.Close()
+	}
+	err = util.CopyEmbedDir(path.Join("themes",e.Theme,"static"),filepath.Join(destDir,"static"),themes)
+	if err!=nil{
+		return err
 	}
 	return nil
 }

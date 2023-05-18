@@ -104,8 +104,8 @@
       </div>
     <div id="contentMain-inner" class="js-page-scroller-container">
       <header id="contentMain-header">
-{{- if ne (index .nd.Info.Episode .part).chap (add .part -1 | index .nd.Info.Episode).chap }}
-        <p class="chapterTitle level1 js-vertical-composition-item"><span>{{ (index .nd.Info.Episode .part).chap }}</span></p>
+{{- if ne (index .nd.Info.Episodes .part).Chapter (add .part -1 | index .nd.Info.Episodes).Chapter }}
+        <p class="chapterTitle level1 js-vertical-composition-item"><span>{{ (index .nd.Info.Episodes .part).Chapter }}</span></p>
 {{- end }}
 {{- end }}
         <p class="widget-episodeTitle js-vertical-composition-item">{{ (index .nd.Novels .part).Title }}</p>

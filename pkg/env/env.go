@@ -2,10 +2,10 @@ package env
 
 import (
 	"encoding/json"
-	flags "github.com/jessevdk/go-flags"
 	"os"
-	"github.com/kazuto28/ndl-go/pkg/util"
+	flags "github.com/jessevdk/go-flags"
 	"github.com/kazuto28/ndl-go/pkg/errors"
+	"github.com/kazuto28/ndl-go/pkg/util"
 )
 
 // Multiple Source manager
@@ -33,18 +33,19 @@ func MkMultipleSrc(sources []string) *MultipleSrc {
 
 // Environment data structure
 type Env struct {
-	StdOut     bool
-	LogOut     bool
-	Delay      float64
-	Episode    int
-	Src        *MultipleSrc
-	Theme      string
-	IsQuiet    bool
-	IsFromFile bool
-	IsRenew    bool
-	Http       *HttpOption
-	OutPath    string
-	OutFormat  string
+	StdOut      bool
+	LogOut      bool
+	Delay       float64
+	Episode     int
+	Src         *MultipleSrc
+	Theme       string
+	IsQuiet     bool
+	IsFromFile  bool
+	IsRenew     bool
+	Http        *HttpOption
+	OutPath     string
+	OutFormat   string
+	Thread      int
 }
 
 type HttpOption struct {
@@ -100,6 +101,7 @@ func MkEnv() (*Env,error) {
 	} else{
 		e.OutPath = o.Output.Dir
 	}
+	e.Thread = c.Thread+1
 	return &e, nil
 }
 
@@ -171,6 +173,7 @@ type Config struct {
 	SymlinkStatic bool              `json:"symlink_static"`
 	PreCmd        string            `json:"precmd"`
 	PostCmd       string            `json:"postcmd"`
+	Thread        int               `json:"thread"`
 }
 
 func MkConfig() *Config {
@@ -187,6 +190,7 @@ func MkConfig() *Config {
 		SymlinkStatic: false,
 		PreCmd:        "",
 		PostCmd:       "",
+		Thread:        1,
 	}
 	return &c
 }

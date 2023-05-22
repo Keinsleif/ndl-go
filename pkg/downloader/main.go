@@ -2,6 +2,7 @@ package downloader
 
 import (
 	"time"
+	"context"
 	"net/url"
 	"github.com/kazuto28/ndl-go/pkg/errors"
 	"github.com/kazuto28/ndl-go/pkg/env"
@@ -51,6 +52,7 @@ type NovelData struct {
 type NovelDownloader interface {
 	MatchSrc(string) bool
 	Init(*env.Env)
+	WithContext(context.Context)
 	Info() *NovelInfo
 	Data() *NovelData
 	Mark(int,bool)

@@ -1,15 +1,17 @@
 package downloader
 
 import (
-	"strings"
+	"context"
 	"net/url"
 	"regexp"
+	"strings"
 	"time"
-	"golang.org/x/exp/slices"
 	"github.com/PuerkitoBio/goquery"
-	nm "github.com/kazuto28/ndl-go/pkg/network"
 	"github.com/kazuto28/ndl-go/pkg/env"
 	"github.com/kazuto28/ndl-go/pkg/errors"
+	nm "github.com/kazuto28/ndl-go/pkg/network"
+	"golang.org/x/exp/slices"
+	"golang.org/x/sync/errgroup"
 )
 
 type KakuyomuND struct {
@@ -19,6 +21,7 @@ type KakuyomuND struct {
 	data *NovelData
 	mark map[int]bool
 	env env.Env
+	ctx context.Context
 }
 
 func (nd KakuyomuND)MatchSrc(src string)bool{
@@ -43,6 +46,11 @@ func (nd *KakuyomuND)Init(e *env.Env){
 	nd.Src = e.Src.Current
 	nd.Session = sess
 	nd.env = *e
+	nd.ctx = context.Background()
+}
+
+func (nd *KakuyomuND)WithContext(ctx context.Context){
+	nd.ctx = ctx
 }
 
 func (nd *KakuyomuND)Info() *NovelInfo{
@@ -122,30 +130,48 @@ func (nd *KakuyomuND)IE() error{
 }
 
 func (nd *KakuyomuND)NE() error{
+	eg, ctx := errgroup.WithContext(nd.ctx)
+	eg.SetLimit(nd.env.Thread)
 	var ne NovelData
 	ne.Info = nd.info
 	ne.Novels = make(map[int]novelPart,nd.info.NumParts)
+	nd.data = &ne
 	for k,v := range nd.mark {
+		k := k
 		if !v{
 			continue
 		}
-		resp, err := nd.Session.Request(nd.info.Episodes[k].Url)
-		if err != nil {
-			return errors.Wrap(err,"KakuyomuND","ERROR")
-		}
-		defer resp.Body.Close()
-		doc, err := goquery.NewDocumentFromReader(resp.Body)
-		if err != nil {
-			return errors.Wrap(err,"KakuyomuND","ERROR")
-		}
-		var novs novelPart
-		novs.Title = doc.Find(".widget-episodeTitle").Text()
-		doc.Find(".widget-episodeBody > p").Each(func(i int,s *goquery.Selection){
-			t, _ := s.Html()
-			novs.Body = append(novs.Body, t)
+		eg.Go(func()error{
+			select {
+			case <-ctx.Done():
+				return nil
+			default:
+				return nd.fetchPart(k)
+			}
 		})
-		ne.Novels[k]=novs
 	}
-	nd.data = &ne
+	if err := eg.Wait(); err!=nil{
+		return err
+	}
+	return nil
+}
+
+func (nd *KakuyomuND)fetchPart(k int)error{
+	resp, err := nd.Session.Request(nd.info.Episodes[k].Url)
+	if err != nil {
+		return errors.Wrap(err,"KakuyomuND","ERROR")
+	}
+	defer resp.Body.Close()
+	doc, err := goquery.NewDocumentFromReader(resp.Body)
+	if err != nil {
+		return errors.Wrap(err,"KakuyomuND","ERROR")
+	}
+	var novs novelPart
+	novs.Title = doc.Find(".widget-episodeTitle").Text()
+	doc.Find(".widget-episodeBody > p").Each(func(i int,s *goquery.Selection){
+		t, _ := s.Html()
+		novs.Body = append(novs.Body, t)
+	})
+	nd.data.Novels[k]=novs
 	return nil
 }

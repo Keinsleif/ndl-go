@@ -5,6 +5,7 @@ go 1.20
 require (
 	github.com/jessevdk/go-flags v1.5.0
 	golang.org/x/exp v0.0.0-20230425010034-47ecfdc1ba53
+	golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4
 )
 
 require (

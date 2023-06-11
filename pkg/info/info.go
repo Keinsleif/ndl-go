@@ -2,7 +2,7 @@ package info
 
 const AUTHOR = "Kondo Kazuto"
 const EMAIL = "mountaindull@gmail.com"
-const URL = "https://github.com/kazuto28/ndl-go/"
+const URL = "https://github.com/Keinsleif/ndl-go/"
 
 const APPNAME = "NDL-GO"
 const DESCRIPTION = "Novel downloader written in GO"

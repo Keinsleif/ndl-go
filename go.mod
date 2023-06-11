@@ -1,4 +1,4 @@
-module github.com/kazuto28/ndl-go
+module github.com/Keinsleif/ndl-go
 
 go 1.20
 

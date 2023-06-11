@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
-	"github.com/kazuto28/ndl-go/pkg/info"
+	"github.com/Keinsleif/ndl-go/pkg/info"
 )
 
 func GetConfigPath() [2]string {

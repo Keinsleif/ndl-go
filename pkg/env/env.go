@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"os"
 	flags "github.com/jessevdk/go-flags"
-	"github.com/kazuto28/ndl-go/pkg/errors"
-	"github.com/kazuto28/ndl-go/pkg/util"
+	"github.com/Keinsleif/ndl-go/pkg/errors"
+	"github.com/Keinsleif/ndl-go/pkg/util"
 )
 
 // Multiple Source manager

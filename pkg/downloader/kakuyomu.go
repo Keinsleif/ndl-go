@@ -7,9 +7,9 @@ import (
 	"strings"
 	"time"
 	"github.com/PuerkitoBio/goquery"
-	"github.com/kazuto28/ndl-go/pkg/env"
-	"github.com/kazuto28/ndl-go/pkg/errors"
-	nm "github.com/kazuto28/ndl-go/pkg/network"
+	"github.com/Keinsleif/ndl-go/pkg/env"
+	"github.com/Keinsleif/ndl-go/pkg/errors"
+	nm "github.com/Keinsleif/ndl-go/pkg/network"
 	"golang.org/x/exp/slices"
 	"golang.org/x/sync/errgroup"
 )

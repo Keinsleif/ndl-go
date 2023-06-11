@@ -4,8 +4,8 @@ import (
 	"time"
 	"net"
 	"net/http"
-	"github.com/kazuto28/ndl-go/pkg/env"
-	"github.com/kazuto28/ndl-go/pkg/errors"
+	"github.com/Keinsleif/ndl-go/pkg/env"
+	"github.com/Keinsleif/ndl-go/pkg/errors"
 )
 
 type HttpSession struct {

@@ -9,9 +9,9 @@ import (
 	"path/filepath"
 	"text/template"
 	"encoding/json"
-	"github.com/kazuto28/ndl-go/pkg/env"
-	"github.com/kazuto28/ndl-go/pkg/util"
-	ndl "github.com/kazuto28/ndl-go/pkg/downloader"
+	"github.com/Keinsleif/ndl-go/pkg/env"
+	"github.com/Keinsleif/ndl-go/pkg/util"
+	ndl "github.com/Keinsleif/ndl-go/pkg/downloader"
 )
 
 //go:embed themes/*

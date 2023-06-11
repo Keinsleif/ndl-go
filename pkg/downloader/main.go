@@ -49,7 +49,7 @@ type NovelData struct {
 	Novels map[int]novelPart
 }
 
-type NovelDownloader interface {
+type Downloader interface {
 	MatchSrc(string) bool
 	Init(*env.Env)
 	WithContext(context.Context)
@@ -61,7 +61,7 @@ type NovelDownloader interface {
 	NE() error
 }
 
-func GetND(src string,e env.Env) (NovelDownloader,error){
+func GetND(src string,e env.Env) (Downloader,error){
 	if (KakuyomuND{}.MatchSrc(src)) {
 		var nd KakuyomuND
 		nd.Init(&e)

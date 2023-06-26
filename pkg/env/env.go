@@ -1,11 +1,13 @@
 package env
 
 import (
+	"fmt"
 	"encoding/json"
 	"os"
 	flags "github.com/jessevdk/go-flags"
 	"github.com/Keinsleif/ndl-go/pkg/errors"
 	"github.com/Keinsleif/ndl-go/pkg/util"
+	"github.com/Keinsleif/ndl-go/pkg/info"
 )
 
 // Multiple Source manager
@@ -106,7 +108,7 @@ func MkEnv() (*Env,error) {
 }
 
 type generalOptions struct {
-	Version    bool   `short:"v" long:"version" description:"show program's version number and exit"`
+	Version    func()   `short:"v" long:"version" description:"show program's version number and exit"`
 	IsQuiet    bool   `short:"q" long:"quiet" description:"suppress non-messages"`
 	ConfigFile string `short:"c" long:"config" description:"specify config file"`
 }
@@ -141,7 +143,7 @@ type Option struct {
 
 func ParseOptions() (*Option, error) {
 	opts := Option{
-		General:    generalOptions{Version: false, IsQuiet: false, ConfigFile: util.GetConfigPath()[1]},
+		General:    generalOptions{Version: func() {fmt.Println(info.VERSION);os.Exit(0)}, IsQuiet: false, ConfigFile: util.GetConfigPath()[1]},
 		Downloader: downloaderOptions{IsAxel: false, IsFromFile: false, IsUpdate: false},
 		Formatter:  formatterOptions{Theme: "", IsRenew: false},
 		Output:     outputOptions{Name:"",Dir:""},

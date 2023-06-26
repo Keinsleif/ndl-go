@@ -9,29 +9,30 @@ import (
 )
 
 
-func NovelDownloader()error{
+func NovelDownloader()(err error){
+	defer errors.WrapPointer(&err,"Main","ERROR")
 	// ctx := context.Background() //TODO
 	e, err := env.MkEnv()
 	if err!=nil{
-		return errors.Wrap(err, "Main", "ERROR")
+		return err
 	}
 
 	for e.Src.HasNext {
 		nd, err := downloader.GetND(e.Src.Current,*e)
 		if err != nil {
-			return errors.Wrap(err,"Main","ERROR")
+			return err
 		}
 		err = nd.IE()
 		if err != nil {
-			return errors.Wrap(err,"Main","ERROR")
+			return err
 		}
 		err = nd.NE()
 		if err != nil {
-			return errors.Wrap(err,"Main","ERROR")
+			return err
 		}
 		err = formatter.NF(nd.Data(),e)
 		if err != nil {
-			return errors.Wrap(err,"Main","ERROR")
+			return err
 		}
 		e.Src.Next()
 	}

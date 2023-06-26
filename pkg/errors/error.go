@@ -54,7 +54,7 @@ func New(cls, msg, level string) *NovelDLError{
 }
 
 func Wrap(err error,class,level string) *NovelDLError{
-	return wrap(err,class,err.Error(),"ERROR")
+	return wrap(err,class,err.Error(),level)
 }
 
 func WrapPointer(err *error,class,level string) {

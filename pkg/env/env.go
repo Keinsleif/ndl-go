@@ -154,7 +154,6 @@ func ParseOptions() (*Option, error) {
 	_, err := parser.Parse()
 	if err != nil {
 		if e, ok := err.(*flags.Error); ok && e.Type == flags.ErrHelp {
-			// parser.WriteHelp(os.Stdout)
 			return &opts, errors.Wrap(err,"","INFO").SetReturnCode(0)
 		}
 		return &opts, errors.Wrap(err,"OptionParser","ERROR")

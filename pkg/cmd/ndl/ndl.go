@@ -2,6 +2,8 @@ package ndl
 
 import (
 	// "context" //TODO
+	"fmt"
+	"os"
 	"github.com/Keinsleif/ndl-go/pkg/downloader"
 	"github.com/Keinsleif/ndl-go/pkg/env"
 	"github.com/Keinsleif/ndl-go/pkg/errors"
@@ -20,7 +22,12 @@ func NovelDownloader()(err error){
 	for e.Src.HasNext {
 		nd, err := downloader.GetND(e.Src.Current,*e)
 		if err != nil {
-			return err
+			ndle := errors.Wrap(err,"Main","ERROR")
+			if ndle.LevelNum >= errors.ERROR_LEVELS["ERROR"] {
+				return err
+			}else {
+				fmt.Fprintln(os.Stderr,ndle.Error())
+			}
 		}
 		err = nd.IE()
 		if err != nil {

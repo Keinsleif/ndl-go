@@ -17,7 +17,7 @@ type HttpSession struct {
 }
 
 func NewHttpSession(o *env.HttpOption) *HttpSession{
-	s := HttpSession{Headers:o.Headers,Timeout:o.Timeout,Retries: o.Retries}
+	s := HttpSession{Headers:o.Headers,Cookies:map[string]string{},Timeout:o.Timeout,Retries: o.Retries}
 	s.InitClient()
 	return &s
 }

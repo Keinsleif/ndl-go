@@ -31,15 +31,15 @@ func (e *NovelDLError)Error() string {
 	}else {
 		switch (e.Level){
 		case "DEBUG":
-			txt = "\u001b[32m[DEBUG]\u001b[0m: "
+			txt = "\u001b[32m[DEBUG]\u001b[0m"
 		case "INFO":
-			txt = "\u001b[36m[INFO]\u001b[0m: "
+			txt = "\u001b[36m[INFO]\u001b[0m"
 		case "WARN":
-			txt = "\u001b[33m[WARN]\u001b[0m: "
+			txt = "\u001b[33m[WARN]\u001b[0m"
 		case "ERROR":
-			txt = "\u001b[31m[ERROR]\u001b[0m: "
+			txt = "\u001b[31m[ERROR]\u001b[0m"
 		case "CRITICAL":
-			txt = "\u001b[32m[CRITICAL]: "
+			txt = "\u001b[32m[CRITICAL]"
 		}
 		txt += fmt.Sprintf("[%s] %s",e.class,e.msg)
 	}

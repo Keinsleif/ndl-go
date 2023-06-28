@@ -6,10 +6,10 @@ import (
 	"regexp"
 	"strings"
 	"time"
-	"github.com/PuerkitoBio/goquery"
 	"github.com/Keinsleif/ndl-go/pkg/env"
 	"github.com/Keinsleif/ndl-go/pkg/errors"
 	nm "github.com/Keinsleif/ndl-go/pkg/network"
+	"github.com/PuerkitoBio/goquery"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -81,7 +81,7 @@ func (nd *NarouND)IE() error{
 	ni.IndexUrl = url.URL{
 		Scheme: u.Scheme,
 		Host: u.Host,
-		Path: reg.FindString(nd.Src),
+		Path: reg.FindString(u.Path),
 	}
 	resp, err := nd.Session.Request(ni.IndexUrl.String())
 	if err != nil {
@@ -146,7 +146,8 @@ func (nd *NarouND)IE() error{
 		}
 	})
 	if ni.Type == "short" {
-		ni.Episodes[1]=&episodeRow{Type:"episode",Part:1,Title:ni.Title,Time:[2]time.Time{},Chapter:"",Url:ni.IndexUrl.String()}
+		ni.Episodes[1] = &episodeRow{Type:"episode",Part:1,Title:ni.Title,Time:[2]time.Time{},Chapter:"",Url:ni.IndexUrl.String()}
+		ni.Index = append(ni.Index,ni.Episodes[1])
 	}
 	nd.info = &ni
 	nd.MarkAll(true)

@@ -92,7 +92,7 @@
           <li class="widget-toc-episode">
             <a href="{{ $dex.Part }}.html" class="widget-toc-episode-episodeTitle">
               <span class="widget-toc-episode-titleLabel js-vertical-composition-item">{{ $dex.Title }}</span>
-			  <time class="widget-toc-episode-datePublished" datetime="{{ $dex.Time.Format "2006-01-02T15:04:05Z" }}">{{ $dex.Time.Format "2006年1月2日" }}</time>
+			  <time class="widget-toc-episode-datePublished" datetime="{{ (index $dex.Time 1).Format "2006-01-02T15:04:05Z" }}">{{ (index $dex.Time 1).Format "2006年1月2日" }}</time>
             </a>
           </li>
 {{- end }}
@@ -175,7 +175,7 @@
         <span>連載</span>
         <span class="js-vertical-composition-item">全{{ .nd.Info.NumParts }}話</span>
       </p>
-      <p class="widget-toc-date"><time datetime="{{ ( add (len .nd.Info.Index) -1 | index .nd.Info.Index ).Time.Format "2006-01-02T15:04:05Z" }}"><span>{{ ( add (len .nd.Info.Index) -1 | index .nd.Info.Index ).Time.Format "2006年1月2日 15:04" }}</span></time> 更新</p>
+      <p class="widget-toc-date"><time datetime="{{ (index ( add (len .nd.Info.Index) -1 | index .nd.Info.Index ).Time 1).Format "2006-01-02T15:04:05Z" }}"><span>{{ (index ( add (len .nd.Info.Index) -1 | index .nd.Info.Index ).Time 1).Format "2006年1月2日 15:04" }}</span></time> 更新</p>
     </div>
   </header>
   <div class="widget-toc-main">
@@ -189,7 +189,7 @@
           <li class="widget-toc-episode">
             <a href="{{ $dex.Part }}.html" class="widget-toc-episode-episodeTitle">
               <span class="widget-toc-episode-titleLabel js-vertical-composition-item">{{ $dex.Title }}</span>
-			  <time class="widget-toc-episode-datePublished" datetime="{{ $dex.Time.Format "2006-01-02T15:04:05Z" }}">{{ $dex.Time.Format "2006年1月2日" }}</time>
+			  <time class="widget-toc-episode-datePublished" datetime="{{ (index $dex.Time 1).Format "2006-01-02T15:04:05Z" }}">{{ (index $dex.Time 1).Format "2006年1月2日" }}</time>
             </a>
           </li>
 {{- end }}

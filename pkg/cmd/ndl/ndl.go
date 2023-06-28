@@ -23,7 +23,7 @@ func NovelDownloader()(err error){
 		nd, err := downloader.GetND(e.Src.Current,*e)
 		if err != nil {
 			ndle := errors.Wrap(err,"Main","ERROR")
-			if ndle.LevelNum >= errors.ERROR_LEVELS["ERROR"] {
+			if ndle.Level == "ERROR" {
 				return err
 			}else {
 				fmt.Fprintln(os.Stderr,ndle.Error())

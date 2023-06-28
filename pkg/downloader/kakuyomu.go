@@ -21,7 +21,6 @@ type KakuyomuND struct {
 	data *NovelData
 	mark map[int]bool
 	env env.Env
-	ctx context.Context
 }
 
 func (nd KakuyomuND)MatchSrc(src string)bool{
@@ -46,11 +45,6 @@ func (nd *KakuyomuND)Init(e *env.Env){
 	nd.Src = e.Src.Current
 	nd.Session = sess
 	nd.env = *e
-	nd.ctx = context.Background()
-}
-
-func (nd *KakuyomuND)WithContext(ctx context.Context){
-	nd.ctx = ctx
 }
 
 func (nd *KakuyomuND)Info() *NovelInfo{
@@ -130,7 +124,7 @@ func (nd *KakuyomuND)IE() error{
 }
 
 func (nd *KakuyomuND)NE() error{
-	eg, ctx := errgroup.WithContext(nd.ctx)
+	eg, ctx := errgroup.WithContext(context.Background())
 	eg.SetLimit(nd.env.Thread)
 	var ne NovelData
 	ne.Info = nd.info

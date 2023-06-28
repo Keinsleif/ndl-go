@@ -2,7 +2,6 @@ package downloader
 
 import (
 	"time"
-	"context"
 	"net/url"
 	"github.com/Keinsleif/ndl-go/pkg/errors"
 	"github.com/Keinsleif/ndl-go/pkg/env"
@@ -52,7 +51,6 @@ type NovelData struct {
 type Downloader interface {
 	MatchSrc(string) bool
 	Init(*env.Env)
-	WithContext(context.Context)
 	Info() *NovelInfo
 	Data() *NovelData
 	Mark(int,bool)

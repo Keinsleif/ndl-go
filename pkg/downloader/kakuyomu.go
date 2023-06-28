@@ -108,7 +108,7 @@ func (nd *KakuyomuND)IE() error{
 			t, _ := time.ParseInLocation("2006-01-02T15:04:05Z",ts,loc)
 			burl := ni.IndexUrl
 			burl.Path = s.Find("a").AttrOr("href","")
-			er := &episodeRow{Type:"episode",Part:part,Title:s.Find("span").Text(),Time:t,Chapter:c,Url:burl.String()}
+			er := &episodeRow{Type:"episode",Part:part,Title:s.Find("span").Text(),Time:[2]time.Time{t,t},Chapter:c,Url:burl.String()}
 			ni.Index = append(ni.Index,er)
 			ni.Episodes[part] = er
 			part++

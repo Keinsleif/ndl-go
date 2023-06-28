@@ -24,7 +24,7 @@ type episodeRow struct {
 	Url string
 	Chapter string
 	Part int
-	Time time.Time
+	Time [2]time.Time
 }
 
 type novelPart struct {

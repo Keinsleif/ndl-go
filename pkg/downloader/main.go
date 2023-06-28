@@ -61,7 +61,11 @@ type Downloader interface {
 
 func GetND(src string,e env.Env) (Downloader,error){
 	if (KakuyomuND{}.MatchSrc(src)) {
-		var nd KakuyomuND
+		nd := KakuyomuND{}
+		nd.Init(&e)
+		return &nd, nil
+	}else if (NarouND{}.MatchSrc(src)) {
+		nd := NarouND{}
 		nd.Init(&e)
 		return &nd, nil
 	}

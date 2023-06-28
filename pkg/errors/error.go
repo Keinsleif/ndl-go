@@ -6,11 +6,20 @@ import (
 	"strings"
 )
 
+var ERROR_LEVELS = map[string]int{
+	"DEBUG": 0,
+	"INFO": 1,
+	"WARN": 2,
+	"ERROR": 3,
+	"CRITICAL": 4,
+}
+
 type NovelDLError struct {
 	err    error
 	msg string
 	class string
 	Level string
+	LevelNum int
 	ReturnCode int
 	Stack *runtime.Frames
 }
@@ -20,7 +29,18 @@ func (e *NovelDLError)Error() string {
 	if e.class == "" {
 		txt = e.msg
 	}else {
-		txt = "ERROR: "
+		switch (e.Level){
+		case "DEBUG":
+			txt = "\u001b[32m[DEBUG]\u001b[0m: "
+		case "INFO":
+			txt = "\u001b[36m[INFO]\u001b[0m: "
+		case "WARN":
+			txt = "\u001b[33m[WARN]\u001b[0m: "
+		case "ERROR":
+			txt = "\u001b[31m[ERROR]\u001b[0m: "
+		case "CRITICAL":
+			txt = "\u001b[32m[CRITICAL]: "
+		}
 		txt += fmt.Sprintf("[%s] %s",e.class,e.msg)
 	}
 	return txt
@@ -50,7 +70,7 @@ func (e *NovelDLError)SetReturnCode(c int) *NovelDLError{
 }
 
 func New(cls, msg, level string) *NovelDLError{
-	return &NovelDLError{err:nil,class:cls,msg:msg,Level:level,Stack:getStacktrace(3),ReturnCode:1}
+	return &NovelDLError{err:nil,class:cls,msg:msg,Level:level,LevelNum: ERROR_LEVELS[level],Stack:getStacktrace(3),ReturnCode:1}
 }
 
 func Wrap(err error,class,level string) *NovelDLError{
@@ -72,7 +92,7 @@ func wrap(err error,class, msg, level string) *NovelDLError{
 	case *NovelDLError:
 		return v
 	default:
-		return &NovelDLError{err:err,class:class,msg:msg,Level:level,Stack:getStacktrace(4),ReturnCode:1}
+		return &NovelDLError{err:err,class:class,msg:msg,Level:level,LevelNum: ERROR_LEVELS[level],Stack:getStacktrace(4),ReturnCode:1}
 	}
 }
 

@@ -23,7 +23,7 @@ func NovelDownloader()(err error){
 		nd, err := downloader.GetND(e.Src.Current,*e)
 		if err != nil {
 			ndle := errors.Wrap(err,"Main","ERROR")
-			if ndle.Level == "ERROR" {
+			if ndle.Level != "WARN" {
 				return err
 			}else {
 				fmt.Fprintln(os.Stderr,ndle.Error())
@@ -31,15 +31,30 @@ func NovelDownloader()(err error){
 		}
 		err = nd.IE()
 		if err != nil {
-			return err
+			ndle := errors.Wrap(err,"Main","ERROR")
+			if ndle.Level != "WARN" {
+				return err
+			}else {
+				fmt.Fprintln(os.Stderr,ndle.Error())
+			}
 		}
 		err = nd.NE()
 		if err != nil {
-			return err
+			ndle := errors.Wrap(err,"Main","ERROR")
+			if ndle.Level != "WARN" {
+				return err
+			}else {
+				fmt.Fprintln(os.Stderr,ndle.Error())
+			}
 		}
 		err = formatter.NF(nd.Data(),e)
 		if err != nil {
-			return err
+			ndle := errors.Wrap(err,"Main","ERROR")
+			if ndle.Level != "WARN" {
+				return err
+			}else {
+				fmt.Fprintln(os.Stderr,ndle.Error())
+			}
 		}
 		e.Src.Next()
 	}

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"os/signal"
 
 	"github.com/Keinsleif/ndl-go/pkg/downloader"
 	"github.com/Keinsleif/ndl-go/pkg/env"
@@ -14,7 +15,9 @@ import (
 
 func NovelDownloader()(err error){
 	defer errors.WrapPointer(&err,"Main","ERROR")
-	ctx := context.Background() //TODO
+	ctx, stop := signal.NotifyContext(context.Background(),os.Interrupt)
+	defer stop()
+	
 	e, err := env.MkEnv()
 	if err!=nil{
 		return err

@@ -1,9 +1,10 @@
 package ndl
 
 import (
-	// "context" //TODO
+	"context"
 	"fmt"
 	"os"
+
 	"github.com/Keinsleif/ndl-go/pkg/downloader"
 	"github.com/Keinsleif/ndl-go/pkg/env"
 	"github.com/Keinsleif/ndl-go/pkg/errors"
@@ -13,7 +14,7 @@ import (
 
 func NovelDownloader()(err error){
 	defer errors.WrapPointer(&err,"Main","ERROR")
-	// ctx := context.Background() //TODO
+	ctx := context.Background() //TODO
 	e, err := env.MkEnv()
 	if err!=nil{
 		return err
@@ -38,7 +39,7 @@ func NovelDownloader()(err error){
 				fmt.Fprintln(os.Stderr,ndle.Error())
 			}
 		}
-		err = nd.NE()
+		err = nd.NE(ctx)
 		if err != nil {
 			ndle := errors.Wrap(err,"Main","ERROR")
 			if ndle.Level != "WARN" {

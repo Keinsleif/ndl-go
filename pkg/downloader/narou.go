@@ -154,8 +154,8 @@ func (nd *NarouND)IE() error{
 	return nil
 }
 
-func (nd *NarouND)NE() error{
-	eg, ctx := errgroup.WithContext(context.Background())
+func (nd *NarouND)NE(ctx context.Context) error{
+	eg, ctx := errgroup.WithContext(ctx)
 	eg.SetLimit(nd.env.Thread)
 	var ne NovelData
 	ne.Info = nd.info

@@ -1,11 +1,14 @@
 package downloader
 
 import (
-	"time"
+	"context"
 	"net/url"
-	"github.com/Keinsleif/ndl-go/pkg/errors"
+	"time"
+
 	"github.com/Keinsleif/ndl-go/pkg/env"
+	"github.com/Keinsleif/ndl-go/pkg/errors"
 )
+
 /*
 type indexRow interface {
 	chapterRow | episodeRow
@@ -56,7 +59,7 @@ type Downloader interface {
 	Mark(int,bool)
 	MarkAll(bool)
 	IE() error
-	NE() error
+	NE(context.Context) error
 }
 
 func GetND(src string,e env.Env) (Downloader,error){

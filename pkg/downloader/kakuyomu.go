@@ -123,8 +123,8 @@ func (nd *KakuyomuND)IE() error{
 	return nil
 }
 
-func (nd *KakuyomuND)NE() error{
-	eg, ctx := errgroup.WithContext(context.TODO())
+func (nd *KakuyomuND)NE(ctx context.Context) error{
+	eg, ctx := errgroup.WithContext(ctx)
 
 	eg.SetLimit(nd.env.Thread)
 	var ne NovelData
@@ -133,17 +133,16 @@ func (nd *KakuyomuND)NE() error{
 	nd.data = &ne
 	for k,v := range nd.mark {
 		k := k
-		if !v{
-			continue
+		if v{
+			eg.Go(func()error{
+				select {
+				case <-ctx.Done():
+					return nil
+				default:
+					return nd.fetchPart(k)
+				}
+			})
 		}
-		eg.Go(func()error{
-			select {
-			case <-ctx.Done():
-				return nil
-			default:
-				return nd.fetchPart(k)
-			}
-		})
 	}
 	if err := eg.Wait(); err!=nil{
 		return err

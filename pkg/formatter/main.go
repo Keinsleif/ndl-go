@@ -31,9 +31,14 @@ func newNameFormatter(ni *ndl.NovelInfo,e *env.Env) *strings.Replacer{
 	return strings.NewReplacer("{title}",ni.Title,"{theme}",e.Theme)
 }
 
-func GetNovelDir(ni *ndl.NovelInfo,e *env.Env)string{
+func GetNovelDir(ni *ndl.NovelInfo,e *env.Env)(string, error){
 	repl := newNameFormatter(ni,e)
-	return filepath.Join(repl.Replace(e.OutPath), repl.Replace(e.OutFormat))
+	fpth := filepath.Join(repl.Replace(e.OutPath), repl.Replace(e.OutFormat))
+	fpth, err := util.CleanPath(fpth)
+	if err != nil {
+		return fpth, errors.Wrap(err,"NameFormatter","ERROR")
+	}
+	return fpth, nil
 }
 
 func NF(nd *ndl.NovelData,e *env.Env) error{
@@ -49,8 +54,11 @@ func NF(nd *ndl.NovelData,e *env.Env) error{
 }
 
 func GenericNF(nd *ndl.NovelData,e *env.Env) error{
-	destDir := GetNovelDir(nd.Info,e)
-	err := os.MkdirAll(destDir,os.ModePerm)
+	destDir, err := GetNovelDir(nd.Info,e)
+	if err!=nil {
+		return errors.Wrap(err,"GenericNF","ERROR")
+	}
+	err = os.MkdirAll(destDir,os.ModePerm)
 	if err!=nil{
 		return errors.Wrap(err,"GenericNF","ERROR")
 	}

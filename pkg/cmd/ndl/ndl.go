@@ -49,23 +49,24 @@ func NovelDownloader()(err error){
 		if ni.Type == "serial" && e.Episode == 0 {
 			if _, err := os.Stat(filepath.Join(ndir,"static","db.json")); err==nil {
 				var db downloader.DB;
-			err := db.LoadDB(filepath.Join(ndir,"static","db.json"))
-			if err != nil {
-				return errors.Wrap(err,"Main","ERROR")
-			}
-			nd.MarkAll(false)
-			if ni.NumParts > db.NumParts {
-				for i := ni.NumParts+1; i < db.NumParts+1; i++ {
-					nd.Mark(i,true)
-				} 
-			}
+				err := db.LoadDB(filepath.Join(ndir,"static","db.json"))
+				if err != nil {
+					return errors.Wrap(err,"Main","ERROR")
+				}
+				nd.MarkAll(false)
+				if ni.NumParts > db.NumParts {
+					for i := ni.NumParts+1; i < db.NumParts+1; i++ {
+						nd.Mark(i,true)
+					} 
+				}
 
-			for k, v := range ni.Episodes {
-				dv, ok := db.Episodes[k]
-				if !ok {
-					nd.Mark(k,true)
+				for k, v := range ni.Episodes {
+					dv, ok := db.Episodes[k]
+					if !ok {
+						nd.Mark(k,true)
 					}else if dv.Before(v.Time[1]) {
-					nd.Mark(k,true)
+						nd.Mark(k,true)
+					}
 				}
 			}
 		}

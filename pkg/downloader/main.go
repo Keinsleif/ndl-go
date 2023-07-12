@@ -3,6 +3,7 @@ package downloader
 import (
 	"encoding/json"
 	"net/url"
+	"os"
 	"time"
 
 	"github.com/Keinsleif/ndl-go/pkg/env"

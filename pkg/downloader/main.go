@@ -1,6 +1,7 @@
 package downloader
 
 import (
+	"encoding/json"
 	"net/url"
 	"time"
 

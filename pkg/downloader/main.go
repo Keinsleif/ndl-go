@@ -52,34 +52,57 @@ type NovelData struct {
 	Novels map[int]novelPart
 }
 
-type DBJson struct {
+type DB struct {
 	Url string
 	Title string
 	NumParts int
 	Author [2]string
-	Episodes map[int]*episodeRow
+	Episodes map[int]*time.Time
 }
 
-func (db *DBJson)LoadDB(fp string)error {
+type dbJson struct {
+	Url string `json:"url"`
+	Title string `json:"title"`
+	NumParts int `json:"num_parts"`
+	Author [2]string `json:"author"`
+	Episodes map[int]string `json:"epis"`
+}
+
+func (db *DB)LoadDB(fp string)error {
+	var res dbJson
 	file, err := os.Open(fp)
 	if err != nil {
 		return errors.Wrap(err, "DBLoader", "ERROR")
 	}
 	decoder := json.NewDecoder(file)
-	if err := decoder.Decode(db); err != nil {
+	if err := decoder.Decode(&res); err != nil {
 		return errors.Wrap(err, "DBLoader", "ERROR")
+	}
+	db.Url = res.Url
+	db.Title = res.Title
+	db.NumParts = res.NumParts
+	db.Author = res.Author
+	db.Episodes = map[int]*time.Time{}
+	loc, _ := time.LoadLocation("Asia/Tokyo")
+	for k,v := range res.Episodes {
+		t, _ := time.ParseInLocation("2006-01-02T15:04:05+09:00",v,loc)
+		db.Episodes[k] = &t
 	}
 	return nil
 }
 
-func (db *DBJson)SaveDB(fp string)error {
+func (db *DB)SaveDB(fp string)error {
+	res := &dbJson{Url: db.Url, Title: db.Title, NumParts: db.NumParts, Author: db.Author, Episodes: map[int]string{}}
+	for k, v := range db.Episodes {
+		res.Episodes[k] = v.Format("2006-01-02T15:04:05+09:00")
+	}
 	file, err := os.Open(fp)
 	if err != nil {
 		return errors.Wrap(err, "DBSaver", "ERROR")
 	}
 	encoder := json.NewEncoder(file)
 	encoder.SetIndent("","\t")
-	if err := encoder.Encode(db); err != nil {
+	if err := encoder.Encode(res); err != nil {
 		return errors.Wrap(err, "DBSaver", "ERROR")
 	}
 	return nil

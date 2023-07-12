@@ -136,6 +136,12 @@ func GetND(src string,e env.Env) (Downloader,error){
 func GenDB(nd Downloader)*DB{
 	ni := nd.Info()
 	db := DB{Url: ni.IndexUrl.String(), Title: ni.Title, NumParts: ni.NumParts, Author: ni.Author, Episodes: map[int]*time.Time{}}
+	for i,v := range nd.GetMarks() {
+		if v {
+			db.Episodes[i] = &ni.Episodes[i].Time[0]
+		}
+	}
+	return &db
 }
 
 func GenDBWithData(nd Downloader, dbData map[int]*time.Time)*DB{

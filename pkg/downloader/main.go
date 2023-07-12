@@ -134,10 +134,10 @@ func GetND(src string,e env.Env) (Downloader,error){
 
 func GenDB(nd Downloader)*DBJson{
 	ni := nd.Info()
-	return &DBJson{Url: ni.IndexUrl.String(), Title: ni.Title, NumParts: ni.NumParts, Author: ni.Author, Episodes: ni.Episodes}
+	db := DB{Url: ni.IndexUrl.String(), Title: ni.Title, NumParts: ni.NumParts, Author: ni.Author, Episodes: map[int]*time.Time{}}
 }
 
-func GenDBWithData(nd Downloader, dbData map[int]*episodeRow)*DBJson{
+func GenDBWithData(nd Downloader, dbData map[int]*time.Time)*DB{
 	db := GenDB(nd)
 	for k, v := range db.Episodes {
 		dbData[k] = v

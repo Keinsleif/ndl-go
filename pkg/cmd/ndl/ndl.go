@@ -64,7 +64,7 @@ func NovelDownloader()(err error){
 				dv, ok := db.Episodes[k]
 				if !ok {
 					nd.Mark(k,true)
-				}else if dv.Time[1].Before(v.Time[1]) {
+					}else if dv.Before(v.Time[1]) {
 					nd.Mark(k,true)
 				}
 			}

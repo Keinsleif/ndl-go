@@ -3,6 +3,7 @@ package ndl
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/Keinsleif/ndl-go/pkg/downloader"
 	"github.com/Keinsleif/ndl-go/pkg/env"
@@ -38,6 +39,36 @@ func NovelDownloader()(err error){
 				fmt.Fprintln(os.Stderr,ndle.Error())
 			}
 		}
+
+		ni := nd.Info()
+
+		ndir, err := formatter.GetNovelDir(ni,e)
+		if err != nil {
+			return err
+		}
+		if ni.Type == "serial" && e.Episode == 0 {
+			var db downloader.DBJson;
+			err := db.LoadDB(filepath.Join(ndir,"static","db.json"))
+			if err != nil {
+				return errors.Wrap(err,"Main","ERROR")
+			}
+			nd.MarkAll(false)
+			if ni.NumParts > db.NumParts {
+				for i := ni.NumParts+1; i < db.NumParts+1; i++ {
+					nd.Mark(i,true)
+				} 
+			}
+
+			for k, v := range ni.Episodes {
+				dv, ok := db.Episodes[k]
+				if !ok {
+					nd.Mark(k,true)
+				}else if dv.Time[1].Before(v.Time[1]) {
+					nd.Mark(k,true)
+				}
+			}
+		}
+
 		err = nd.NE()
 		if err != nil {
 			ndle := errors.Wrap(err,"Main","ERROR")

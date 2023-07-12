@@ -47,7 +47,8 @@ func NovelDownloader()(err error){
 			return err
 		}
 		if ni.Type == "serial" && e.Episode == 0 {
-			var db downloader.DBJson;
+			if _, err := os.Stat(filepath.Join(ndir,"static","db.json")); err==nil {
+				var db downloader.DB;
 			err := db.LoadDB(filepath.Join(ndir,"static","db.json"))
 			if err != nil {
 				return errors.Wrap(err,"Main","ERROR")

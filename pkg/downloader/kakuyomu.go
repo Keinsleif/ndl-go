@@ -68,6 +68,10 @@ func (nd *KakuyomuND)MarkAll(m bool) {
 	}
 }
 
+func (nd *KakuyomuND)GetMarks()map[int]bool{
+	return nd.mark
+}
+
 func (nd *KakuyomuND)IE() error{
 	ni := NovelInfo{Type:"serial",Site:"kakuyomu"}
 	reg := regexp.MustCompile(`/works/([0-9]+)`)

@@ -74,6 +74,10 @@ func (nd *NarouND)MarkAll(m bool) {
 	}
 }
 
+func (nd *NarouND)GetMarks() map[int]bool {
+	return nd.mark
+}
+
 func (nd *NarouND)IE() error{
 	ni := NovelInfo{Site:"narou"}
 	reg := regexp.MustCompile(`/(n[0-9a-zA-Z]+)`)

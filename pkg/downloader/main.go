@@ -115,6 +115,7 @@ type Downloader interface {
 	Data() *NovelData
 	Mark(int,bool)
 	MarkAll(bool)
+	GetMarks() map[int]bool
 	IE() error
 	NE() error
 }

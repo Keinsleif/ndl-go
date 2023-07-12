@@ -16,3 +16,4 @@ tsts_*
 # vendor/
 tmp*/
 .tmp*/
+bin/

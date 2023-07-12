@@ -27,8 +27,13 @@ type ConfigJson struct {
 	} `json:"loads"`
 }
 
-func NewNameFormatter(ni *ndl.NovelInfo,e *env.Env) *strings.Replacer{
+func newNameFormatter(ni *ndl.NovelInfo,e *env.Env) *strings.Replacer{
 	return strings.NewReplacer("{title}",ni.Title,"{theme}",e.Theme)
+}
+
+func GetNovelDir(ni *ndl.NovelInfo,e *env.Env)string{
+	repl := newNameFormatter(ni,e)
+	return filepath.Join(repl.Replace(e.OutPath), repl.Replace(e.OutFormat))
 }
 
 func NF(nd *ndl.NovelData,e *env.Env) error{
@@ -44,8 +49,7 @@ func NF(nd *ndl.NovelData,e *env.Env) error{
 }
 
 func GenericNF(nd *ndl.NovelData,e *env.Env) error{
-	repl := NewNameFormatter(nd.Info,e)
-	destDir := filepath.Join(repl.Replace(e.OutPath), repl.Replace(e.OutFormat))
+	destDir := GetNovelDir(nd.Info,e)
 	err := os.MkdirAll(destDir,os.ModePerm)
 	if err!=nil{
 		return errors.Wrap(err,"GenericNF","ERROR")

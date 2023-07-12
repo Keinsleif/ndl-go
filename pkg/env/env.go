@@ -228,6 +228,7 @@ func CreateConfig(filePath string, config *Config) error {
 	defer file.Close()
 
 	encoder := json.NewEncoder(file)
+	encoder.SetIndent("","\t")
 	err = encoder.Encode(*config)
 	if err != nil {
 		return errors.Wrap(err,"ConfigLoader","WARN")

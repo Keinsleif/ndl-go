@@ -123,8 +123,8 @@ func (nd *KakuyomuND)IE() error{
 	return nil
 }
 
-func (nd *KakuyomuND)NE(ctx context.Context) error{
-	eg, ctx := errgroup.WithContext(ctx)
+func (nd *KakuyomuND)NE() error{
+	eg, ctx := errgroup.WithContext(context.TODO())
 
 	eg.SetLimit(nd.env.Thread)
 	var ne NovelData

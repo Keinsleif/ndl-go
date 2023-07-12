@@ -1,10 +1,8 @@
 package ndl
 
 import (
-	"context"
 	"fmt"
 	"os"
-	"os/signal"
 
 	"github.com/Keinsleif/ndl-go/pkg/downloader"
 	"github.com/Keinsleif/ndl-go/pkg/env"
@@ -15,8 +13,6 @@ import (
 
 func NovelDownloader()(err error){
 	defer errors.WrapPointer(&err,"Main","ERROR")
-	ctx, stop := signal.NotifyContext(context.Background(),os.Interrupt)
-	defer stop()
 	
 	e, err := env.MkEnv()
 	if err!=nil{
@@ -42,7 +38,7 @@ func NovelDownloader()(err error){
 				fmt.Fprintln(os.Stderr,ndle.Error())
 			}
 		}
-		err = nd.NE(ctx)
+		err = nd.NE()
 		if err != nil {
 			ndle := errors.Wrap(err,"Main","ERROR")
 			if ndle.Level != "WARN" {

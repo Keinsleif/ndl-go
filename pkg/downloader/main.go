@@ -1,7 +1,6 @@
 package downloader
 
 import (
-	"context"
 	"net/url"
 	"time"
 
@@ -59,7 +58,7 @@ type Downloader interface {
 	Mark(int,bool)
 	MarkAll(bool)
 	IE() error
-	NE(context.Context) error
+	NE() error
 }
 
 func GetND(src string,e env.Env) (Downloader,error){

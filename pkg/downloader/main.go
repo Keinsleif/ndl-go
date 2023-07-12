@@ -50,6 +50,14 @@ type NovelData struct {
 	Novels map[int]novelPart
 }
 
+type DBJson struct {
+	Url string
+	Title string
+	NumParts int
+	Author [2]string
+	Episodes map[int]*episodeRow
+}
+
 type Downloader interface {
 	MatchSrc(string) bool
 	Init(*env.Env)

@@ -58,6 +58,31 @@ type DBJson struct {
 	Episodes map[int]*episodeRow
 }
 
+func (db *DBJson)LoadDB(fp string)error {
+	file, err := os.Open(fp)
+	if err != nil {
+		return errors.Wrap(err, "DBLoader", "ERROR")
+	}
+	decoder := json.NewDecoder(file)
+	if err := decoder.Decode(db); err != nil {
+		return errors.Wrap(err, "DBLoader", "ERROR")
+	}
+	return nil
+}
+
+func (db *DBJson)SaveDB(fp string)error {
+	file, err := os.Open(fp)
+	if err != nil {
+		return errors.Wrap(err, "DBSaver", "ERROR")
+	}
+	encoder := json.NewEncoder(file)
+	encoder.SetIndent("","\t")
+	if err := encoder.Encode(db); err != nil {
+		return errors.Wrap(err, "DBSaver", "ERROR")
+	}
+	return nil
+}
+
 type Downloader interface {
 	MatchSrc(string) bool
 	Init(*env.Env)

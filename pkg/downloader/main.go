@@ -81,3 +81,17 @@ func GetND(src string,e env.Env) (Downloader,error){
 	}
 	return nil, errors.New("Main","Matching source: unsupported","WARN")
 }
+
+func GenDB(nd Downloader)*DBJson{
+	ni := nd.Info()
+	return &DBJson{Url: ni.IndexUrl.String(), Title: ni.Title, NumParts: ni.NumParts, Author: ni.Author, Episodes: ni.Episodes}
+}
+
+func GenDBWithData(nd Downloader, dbData map[int]*episodeRow)*DBJson{
+	db := GenDB(nd)
+	for k, v := range db.Episodes {
+		dbData[k] = v
+	}
+	db.Episodes = dbData
+	return db
+}

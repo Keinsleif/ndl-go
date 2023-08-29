@@ -112,11 +112,11 @@ func (nd *NarouND)IE() error{
 	}
 	ad := doc.Find(".novel_writername")
 	if ad.Find("a").Length()==0 {
-		ni.Author = [2]string{strings.TrimSpace(ad.Text())[3:],""}
+		ni.Author = [2]string{strings.TrimSpace(ad.Text())[len("作者："):],""}
 	}else {
 		aurl := ni.IndexUrl
 		aurl.Path, _ = ad.Find("a").Attr("href")
-		ni.Author = [2]string{strings.TrimSpace(ad.Text())[3:],aurl.String()}
+		ni.Author = [2]string{strings.TrimSpace(ad.Text())[len("作者："):],aurl.String()}
 	}
 	ni.Title = doc.Find(".novel_title").First().Text()
 	ni.Description, _ = doc.Find("#novel_ex").First().Html()

@@ -1,0 +1,458 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>{{ .nd.Info.Title }} - {{ (index .nd.Novels .part).Title }}</title>
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta name="format-detection" content="telephone=no" />
+
+<link rel="shortcut icon" href="static/narou.ico" />
+<link rel="icon" href="static/narou.ico" />
+<link rel="apple-touch-icon-precomposed" href="static/apple-touch-icon-precomposed.png" />
+
+<link rel="stylesheet" type="text/css" href="static/reset.css" media="screen,print" />
+<link rel="stylesheet" type="text/css" media="all" href="static/kotei.css" />
+
+{{- range $k, $v := .config.Loads.CSS }}
+{{- range $_, $j := $v }}
+<link rel="stylesheet" href="{{ $j }}" media="{{ $k }}"/>
+{{- end }}
+{{- end }}
+
+<script type="text/javascript"><!--
+var domain = 'syosetu.com';
+//--></script>
+
+<script type="text/javascript" src="static/jquery.min.js"></script>
+<script type="text/javascript" src="static/jquery.hina.js"></script>
+<script type="text/javascript" src="static/global.js"></script>
+<script type="text/javascript" src="static/novelview.js"></script>
+
+<script type="text/javascript" src="static/jquery.readmore.js"></script>
+
+<!--
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+ xmlns:dc="http://purl.org/dc/elements/1.1/">
+
+<rdf:Description
+rdf:about="https://ncode.syosetu.com/n4251cr/
+dc:identifier="https://ncode.syosetu.com/n4251cr/"
+ />
+</rdf:RDF>
+-->
+
+</head>
+<body onload="initRollovers();">
+<div id="page_type" style="display: none">base</div>
+
+<a id="pageBottom" href="#footer">↓</a>
+
+<div id="novel_header">
+<ul id="head_nav">
+<li id="login">
+<a href="https://syosetu.com/user/top/">ホーム</a>
+</li>
+
+<!-- 
+<li><a href="https://ncode.syosetu.com/novelview/infotop/ncode/n4251cr/">小説情報</a></li>
+<li><a href="https://novelcom.syosetu.com/impression/list/ncode/694182/no/1/">感想</a></li>
+<li><a href="https://novelcom.syosetu.com/novelreview/list/ncode/694182/">レビュー</a></li>
+<li>
+<form action="https://ncode.syosetu.com/novelpdf/creatingpdf/ncode/n4251cr/" class="js-pdf-form" method="post">
+<input type="submit" value="縦書きPDF" class="pdflilnk" data-nolock="true">
+<input type="hidden" name="token" value="78be21be9384e15ea7651ef149e4e4f2">
+</form>
+</li>
+<li class="booklist">
+<a href="javascript:void(0)" class="js-bookmark_setting_button button_bookmark change">ブックマーク設定変更</a>
+<input type="hidden" class="js-bookmark_updateconf_url" value="https://syosetu.com/favnovelmain/updateconfirmajax/favncode/694182/no/1/">
+</li>
+
+<li class="bookmark_now set_siori">
+<a href="javascript:void(0)" >しおりを挿む</a>
+<input type="hidden" name="siori_url" value="https://syosetu.com/favnovelmain/ichiupdateajax/useridfavncode/1868132_694182/no/1/?token=78be21be9384e15ea7651ef149e4e4f2">
+</li>
+
+
+<li>
+<a
+style="border-left:none;"
+
+href="https://twitter.com/intent/tweet?text=%E7%84%A1%E8%81%B7%E8%BB%A2%E7%94%9F%E3%80%80-+%E8%9B%87%E8%B6%B3%E7%B7%A8+-%E3%80%8E%EF%BC%91%E3%80%80%E3%80%8C%E3%83%8E%E3%83%AB%E3%83%B3%E3%81%AE%E5%AB%81%E5%85%A5%E3%82%8A%E3%80%80%E5%89%8D%E7%B7%A8%E3%80%8D%E3%80%8F&amp;url=https%3A%2F%2Fncode.syosetu.com%2Fn4251cr%2F1%2F&amp;hashtags=narou%2CnarouN4251CR">
+
+<img src="https://static.syosetu.com/novelview/img/Twitter_logo_blue.png?nrkioy" class="menu" style="margin-left:7px; margin-right:7px;" height="20px" />
+</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</li>
+-->
+
+</ul>
+<div id="novelnavi_right">
+<div class="toggle" id="menu_on">表示調整</div>
+<div class="toggle_menuclose" id="menu_off">閉じる</div>
+
+<div class="novelview_navi">
+<img src="https://static.syosetu.com/novelview/img/novelview_on.gif?n7nper" width="100" height="20" style="cursor:pointer;" onclick="sasieclick(true);" id="sasieflag" alt="挿絵表示切替ボタン" />
+<script type="text/javascript"><!--
+sasieinit();
+//--></script>
+
+<div class="color">
+▼配色<br />
+<label><input type="radio" value="0" name="colorset" />指定なし(作者設定優先)</label><br />
+<label><input type="radio" value="1" name="colorset" />標準設定</label><br />
+<label><input type="radio" value="2" name="colorset" />ブラックモード</label><br />
+<label><input type="radio" value="3" name="colorset" />ブラックモード2</label><br />
+<label><input type="radio" value="4" name="colorset" />通常[1]</label><br />
+<label><input type="radio" value="5" name="colorset" />通常[2]</label><br />
+<label><input type="radio" value="6" name="colorset" />シンプル</label><br />
+<label><input type="radio" value="7" name="colorset" />おすすめ設定</label>
+</div>
+
+▼行間
+<ul class="novelview_menu">
+<li><input type="text" value="150" name="lineheight" size="2" style="text-align:right;" readonly="readonly" />％</li>
+<li><a href="javascript:void(0);" name="lineheight_inc" class="size">+</a></li>
+<li><a href="javascript:void(0);" name="lineheight_dec" class="size">-</a></li>
+<li><a href="javascript:void(0);" name="lineheight_reset">リセット</a></li>
+</ul>
+
+<div class="size">
+▼文字サイズ
+<ul class="novelview_menu">
+<li><input type="text" value="95" name="fontsize" size="2" style="text-align:right;" readonly="readonly" />％</li>
+<li><a href="javascript:void(0);" name="fontsize_inc" class="size">+</a></li>
+<li><a href="javascript:void(0);" name="fontsize_dec" class="size">-</a></li>
+<li><a href="javascript:void(0);" name="fontsize_reset">リセット</a></li>
+</ul>
+</div>
+
+<script type="text/javascript"><!--
+changeButtonView();
+//--></script>
+
+▼メニューバー<br />
+<label><input type="checkbox" name="fix_menu_bar" />追従</label>
+<span id="menu_off_2">×閉じる</span>
+
+</div><!--novelview_navi-->
+</div><!-- novelnavi_right -->
+</div><!--novel_header-->
+
+<div id="container">
+
+
+
+
+<div class="contents1">
+<a href="index.html" class="margin_r20">{{ .nd.Info.Title }}</a>
+作者：<a href="{{ index .nd.Info.Author 1 }}">{{ index .nd.Info.Author 0 }}</a>
+{{- if ne (index .nd.Info.Episodes .part).Chapter "" }}
+<p class="chapter_title">{{ (index .nd.Info.Episodes .part).Chapter }}</p>
+{{- end }}
+
+</div><!--contents1-->
+
+<style>
+/* <div class="toaster bookmarker_addend" id="toaster_success">
+<strong>しおりの位置情報を変更しました</strong>
+</div>
+<div class="toaster bookmarker_error" id="toaster_error">
+<strong>エラーが発生しました</strong><br />
+<div class="text-right">
+<a href="#" class="toaster_close">閉じる</a>
+</div>
+</div>
+
+<div class="narou_modal" data-remodal-id="setting_bookmark">
+<div class="close js-setting_bookmark_modal_close"></div>
+
+<div class="scroll">
+<p class="fav_noveltitle js-setting_bookmark_title"></p>
+<p class="mes">ブックマークの設定を変更します。</p>
+
+<div class="favnovelmain_update">
+<h3>設定</h3>
+<p>
+<input type="checkbox" name="isnotice" value="1" />更新通知
+<span class="left10 js-isnoticecnt">0/400</span>
+</p>
+
+<p>
+<label><input type="radio" name="jyokyo" class="bookmark_jyokyo" value="2" checked="checked" />公開</label>
+<label><input type="radio" name="jyokyo" class="bookmark_jyokyo left10" value="1" />非公開</label>
+</p>
+
+<div class="toaster bookmarker_addend js-bookmark_save_toaster" id="bookmark_save_toaster">
+<strong>設定を保存しました</strong>
+</div>
+
+<div class="toaster bookmarker_error js-bookmark_save_err_toaster">
+<strong>エラーが発生しました</strong>
+<div id="bookmark_save_errmsg" class="js-bookmark_save_errmsg"></div>
+<div class="text-right">
+<a href="#" class="toaster_close">閉じる</a>
+</div>
+</div>
+
+<p>
+カテゴリ
+<select name="categoryid" class="js-category_select">
+</select>
+
+</p>
+<div class="favnovelmain_bkm_memo">
+<label>メモ</label>
+<div class="favnovelmain_bkm_memo_content">
+<input type="text" maxlength="50" class="js-bookmark_memo" value="" >
+<span class="favnovelmain_bkm_memo_content_help-text">※50文字以内</span>
+</div>
+</div>
+
+<input type="button" class="button js-bookmark_setting_submit" value="設定を保存" />
+<input type="hidden" class="js-bookmark_setting_useridfavncode" value="" />
+<input type="hidden" class="js-bookmark_setting_xidfavncode" value="" />
+<input type="hidden" class="js-bookmark_setting_token" value="" />
+</div>
+<!-- favnovelmain_update -->
+<div class="bookmark-change">
+<input class="button js-delete_siori_submit" type="button" value="しおりを解除" />
+<input class="button js-delconf_bookmark_submit" type="button" value="ブックマークを解除" />
+</div><!-- /.bookmark-change -->
+<input type="hidden" class="js-bookmark_setting_url" value="https://syosetu.com/favnovelmain/updateajax/" />
+<input type="hidden" class="js-delete_siori_url" value="https://syosetu.com/favnovelmain/deletesioriajax/" />
+<input type="hidden" class="js-del_bookmark_url" value="https://syosetu.com/favnovelmain/deleteajax/" />
+
+<a href="https://syosetu.com/favnovelmain/list/?nowcategory=4" class="button js-modal_bookmark_btn">ブックマークへ移動</a>
+<input type="hidden" value="//syosetu.com/favnovelmain/list/" class="js-base_bookmark_url">
+</div><!-- scroll -->
+</div>
+
+<div class="narou_modal" data-remodal-id="delend_siori">
+<div class="close js-delend_siori_modal_close"></div>
+<p class="mes">しおりを解除しました。</p>
+</div>
+
+<div class="narou_modal" data-remodal-id="delend_bookmark">
+<div class="close js-delend_bookmark_modal_close"></div>
+<p class="mes">ブックマークを解除しました。</p>
+</div>
+
+<div class="narou_modal modal_error" data-remodal-id="error_modal">
+<div class="close js-error_modal_close"></div>
+
+<div class="scroll">
+<p class="mes err">エラーが発生しました。</p>
+<div class="err js-modal_err_mes"></div>
+<p class="guide">エラーの原因がわからない場合は<a href="https://syosetu.com/helpcenter/top/" target="_blank">ヘルプセンター</a>をご確認ください。</p>
+</div><!-- scroll -->
+</div> */</style>
+
+
+<div id="novel_contents">
+<div id="novel_color">
+
+
+
+<div class="novel_bn">
+{{- if ne .part 1 }}
+    <a href="{{ add .part -1 }}">&lt;&lt;&nbsp;前へ</a>
+{{- end }}
+{{- if ne .part .nd.Info.NumParts }}
+    <a href="{{ add .part 1 }}.html">次へ&nbsp;&gt;&gt;</a>
+{{- end }}
+</div><!--novel_bn-->
+
+<div id="novel_no">{{ .part }}/{{ .nd.Info.NumParts }}</div>
+
+
+<p class="novel_subtitle">{{ (index .nd.Novels .part).Title }}</p>
+
+
+
+<div id="novel_honbun" class="novel_view">
+{{- range $i, $v := (index .nd.Novels .part).Body }}
+    <p id="L{{ add $i 1 }}">{{ $v }}</p>
+{{- end }}
+</div>
+
+
+<div class="novel_bn">
+{{- if ne .part 1 }}
+    <a href="{{ add .part -1 }}.html">&lt;&lt;&nbsp;前へ</a>
+{{- end }}
+{{- if ne .part .nd.Info.NumParts }}
+    <a href="{{ add .part 1 }}.html">次へ&nbsp;&gt;&gt;</a>
+{{- end }}
+    <a href="index.html">目次</a>
+</div>
+
+</div><!--novel_color-->
+
+<div class="wrap_menu_novelview_after">
+<div class="box_menu_novelview_after clearfix">
+<ul class="menu_novelview_after">
+
+<li class="list_menu_novelview_after"><a href="https://syosetu.com/favnovelmain/list/">ブックマーク</a></li>
+<!--
+<li class="list_menu_novelview_after"><a href="JavaScript:void(0);" class="js-scroll" data-scroll="#impression">感想を書く</a></li>
+-->
+</ul>
+<!--
+<ul class="footerbookmark"><li class="booklist">
+<a href="javascript:void(0)" class="js-bookmark_setting_button button_bookmark change">ブックマーク設定変更</a>
+<input type="hidden" class="js-bookmark_updateconf_url" value="https://syosetu.com/favnovelmain/updateconfirmajax/favncode/694182/no/1/">
+</li>
+
+<li class="bookmark_now set_siori">
+<a href="javascript:void(0)" >しおりを挿む</a>
+<input type="hidden" name="siori_url" value="https://syosetu.com/favnovelmain/ichiupdateajax/useridfavncode/1868132_694182/no/1/?token=78be21be9384e15ea7651ef149e4e4f2">
+</li>
+</ul>
+-->
+</div><!-- footer_bookmark -->
+</div><!-- wrap -->
+
+
+
+<style>
+/* <div class="p-novelgood-form">
+<div class="p-novelgood-form__wrap">
+<div class="p-novelgood-form__discription customlayout-color">
+<div class="p-novelgood-form__info">
+<span>いいねで応援</span><a href="https://syosetu.com/helpcenter/helppage/helppageid/107" target="_blank"><span class="p-icon p-icon--question" aria-label="ヘルプ"></span></a>
+</div>
+<span class="p-novelgood-form__status">受付停止中</span>
+</div>
+<div class="p-novelgood-form__icon p-novelgood-form__icon--stop"><span class="p-icon p-icon--thumbs-up-line-off"></span></div>
+</div><!-- /.p-novelgood-form__wrap -->
+</div><!-- /.p-novelgood-form -->
+
+<div id="novel_hyouka" class="p-novelpoint-form">
+<input type="hidden" name="img_star_half" value="is-half" />
+<input type="hidden" name="img_star_off" value="is-empty" />
+<input type="hidden" name="img_star_on" value="is-full" />
+<div class="p-novelpoint-form__description">
+ポイントを入れて作者を応援しましょう！<a href="https://syosetu.com/helpcenter/helppage/helppageid/122" target="_blank"><span class="p-icon p-icon--question" aria-label="ヘルプ"></span></a>
+</div>
+<input type="hidden" name="before_hyokapoint" value=0 />
+<input type="hidden" name="token" value="78be21be9384e15ea7651ef149e4e4f2" />
+<input type="hidden" name="point_url" value="https://novelcom.syosetu.com/novelpoint/register/ncode/694182/" />
+<div id="novelpoint_form" class="c-novelpoint-star c-novelpoint-star--lg"></div>
+</div><!-- novel_hyouka -->
+
+
+
+
+
+<br />
+
+<div class="center">
+<a href="https://twitter.com/intent/tweet?text=%E3%80%8C%E7%84%A1%E8%81%B7%E8%BB%A2%E7%94%9F%E3%80%80-+%E8%9B%87%E8%B6%B3%E7%B7%A8+-%E3%80%8D%E8%AA%AD%E3%82%93%E3%81%A0%EF%BC%81&url=https%3A%2F%2Fncode.syosetu.com%2Fn4251cr%2F&hashtags=narou%2CnarouN4251CR" class="twitter-share-button">Tweet</a>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+</div> */
+</style>
+
+<div id="impression" style="display: none">
+<div class="hyoukanavi_title">―　感想を書く　―</div>
+
+<form action="https://novelcom.syosetu.com/impression/confirm/ncode/694182/no/1/" method="post">
+<p class="description">
+１項目の入力から送信できます。<br />
+感想を書く際の禁止事項については<a target="_blank" href="https://syosetu.com/helpcenter/helppage/helppageid/106" class="help-link">こちらの記事</a>をご確認ください。
+</p>
+
+<p class="novelreport_attention">
+※誤字脱字の報告は誤字報告機能をご利用ください。<br />
+誤字報告機能は、本文、または後書き下にございます。<br />
+詳しくは<a href="https://syosetu.com/helpcenter/helppage/helppageid/109">こちらの記事</a>をご確認ください。
+</p>
+
+名前：
+<a href="https://syosetu.com/user/top/">異世界万歳！</a>
+<br />
+
+<label class="pointer"><input type="checkbox" name="is_individual" value="1" checked="checked" />第1部分の感想として書く</label><br />
+<br />
+
+▼良い点<br />
+<textarea cols="47" rows="4" name="goodcomment">
+</textarea>
+
+▼気になる点<br />
+<textarea cols="47" rows="4" name="badcomment">
+</textarea>
+
+▼一言<br />
+<textarea cols="47" rows="5" name="hitokoto">
+</textarea>
+
+<input type="checkbox" id="is_nendai_kokai" name="is_nendai_kokai" value="1" />
+<label for="is_nendai_kokai">年代情報を公開する(18歳～22歳)</label><br />
+
+<input type="checkbox" id="is_sex_kokai" name="is_sex_kokai" value="1" />
+<label for="is_sex_kokai">性別情報を公開する(男性)</label>
+
+<div class="button_box">
+<input type="submit" class="button" value="送信[確認]" id="impressionconfirm" />
+</div>
+</form>
+</div><!-- impression -->
+
+
+
+
+
+<div id="novel_attention">
++注意+<br />
+<span class="attention">特に記載なき場合、掲載されている小説はすべてフィクションであり実在の人物・団体等とは一切関係ありません。<br />
+特に記載なき場合、掲載されている小説の著作権は作者にあります(一部作品除く)。<br />
+作者以外の方による小説の引用を超える無断転載は禁止しており、行った場合、著作権法の違反となります。<br />
+</span><br />
+この小説はリンクフリーです。ご自由にリンク(紹介)してください。<br />
+この小説はスマートフォン対応です。スマートフォンかパソコンかを自動で判別し、適切なページを表示します。<br />
+小説の読了時間は毎分500文字を読むと想定した場合の時間です。目安にして下さい。
+</div><!--novel_attention-->
+
+
+<div id="novel_footer">
+<ul class="undernavi">
+<li><a href="{{ index .nd.Info.Author 1 }}">作者マイページ</a></li>
+<!--
+<li><a href="https://ncode.syosetu.com/txtdownload/top/ncode/694182/" onclick="javascript:window.open('https://ncode.syosetu.com/txtdownload/top/ncode/694182/','a','width=600,height=450'); return false;">TXTダウンロード</a></li>
+
+<li><a href="https://novelcom.syosetu.com/novelreport/input/ncode/694182/no/1/">誤字報告</a></li>
+
+<li><a href="https://syosetu.com/ihantsuhou/input/ncode/694182/">情報提供</a></li>
+-->
+</ul>
+</div><!--novel_footer-->
+
+</div><!--novel_contents-->
+
+
+<a id="pageTop" href="#main">↑ページトップへ</a>
+
+</div><!--container-->
+
+<!-- フッタここから -->
+<div id="footer">
+<ul class="undernavi">
+<li><a href="https://syosetu.com">小説家になろう</a></li>
+<li><a href="https://yomou.syosetu.com">小説を読もう！</a></li>
+<li id="search">
+<form action="https://yomou.syosetu.com/search.php">
+<input name="word" size="21" type="text" />
+<input value="検索" type="submit" />
+</form>
+</li>
+</ul>
+</div><!--footer-->
+<!-- フッタここまで -->
+
+</body></html>
